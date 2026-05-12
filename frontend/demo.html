@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>SonicCore | Professional Music Production Studio</title>
+        <style>
+            /* --- DESIGN SYSTEM --- */
+            :root {
+                --primary-blue: #0046ad; /* Bold Royal Blue */
+                --dark-blue: #002d70;
+                --white: #ffffff;
+                --off-white: #f4f7ff;
+                --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+                --shadow: 0 10px 30px rgba(0, 70, 173, 0.1);
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+                scroll-behavior: smooth;
+            }
+
+            body {
+                background-color: var(--white);
+                color: var(--dark-blue);
+                line-height: 1.6;
+            }
+
+            /* --- NAVIGATION --- */
+            nav {
+                background: var(--white);
+                height: 90px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0 8%;
+                position: fixed;
+                width: 100%;
+                z-index: 1000;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            }
+
+            .logo {
+                font-size: 1.8rem;
+                font-weight: 900;
+                color: var(--primary-blue);
+                text-transform: uppercase;
+                letter-spacing: -1px;
+            }
+
+            .nav-links {
+                display: flex;
+                list-style: none;
+                align-items: center;
+            }
+
+            .nav-links li {
+                padding: 0 20px;
+            }
+
+            .nav-links a {
+                color: var(--dark-blue);
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 0.95rem;
+                transition: var(--transition);
+            }
+
+            .nav-links a:hover {
+                color: var(--primary-blue);
+            }
+
+            .nav-btn {
+                background: var(--primary-blue);
+                color: var(--white) !important;
+                padding: 12px 25px;
+                border-radius: 5px;
+                margin-left: 10px;
+            }
+
+            /* --- MOBILE MENU --- */
+            .burger {
+                display: none;
+                cursor: pointer;
+            }
+            .burger div {
+                width: 25px;
+                height: 2px;
+                background: var(--primary-blue);
+                margin: 6px;
+                transition: 0.3s;
+            }
+
+            @media screen and (max-width: 992px) {
+                .nav-links {
+                    position: fixed;
+                    right: 0;
+                    height: 100vh;
+                    top: 0;
+                    background: var(--primary-blue);
+                    width: 70%;
+                    flex-direction: column;
+                    justify-content: center;
+                    transform: translateX(100%);
+                    transition: transform 0.5s ease;
+                }
+                .nav-links a {
+                    color: var(--white);
+                    font-size: 1.5rem;
+                }
+                .burger {
+                    display: block;
+                    z-index: 1001;
+                }
+                .toggle .line1 {
+                    transform: rotate(-45deg) translate(-5px, 6px);
+                    background: var(--white);
+                }
+                .toggle .line2 {
+                    opacity: 0;
+                }
+                .toggle .line3 {
+                    transform: rotate(45deg) translate(-5px, -6px);
+                    background: var(--white);
+                }
+            }
+
+            .nav-active {
+                transform: translateX(0%);
+            }
+
+            /* --- HERO CAROUSEL --- */
+            .hero {
+                position: relative;
+                height: 100vh;
+                overflow: hidden;
+                background: #000;
+            }
+            .carousel-container {
+                display: flex;
+                height: 100%;
+                transition: 0.7s ease-in-out;
+            }
+            .slide {
+                min-width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                color: var(--white);
+                background-size: cover;
+                background-position: center;
+                padding: 0 10%;
+            }
+            .slide h1 {
+                font-size: clamp(2.5rem, 6vw, 5rem);
+                font-weight: 800;
+                line-height: 1.1;
+                margin-bottom: 20px;
+            }
+            .slide p {
+                font-size: 1.2rem;
+                margin-bottom: 40px;
+                max-width: 700px;
+                opacity: 0.9;
+            }
+
+            .c-btn {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                background: rgba(255, 255, 255, 0.1);
+                border: none;
+                color: white;
+                width: 60px;
+                height: 60px;
+                cursor: pointer;
+                border-radius: 50%;
+                font-size: 1.5rem;
+                z-index: 10;
+            }
+            .prev {
+                left: 30px;
+            }
+            .next {
+                right: 30px;
+            }
+
+            /* --- SECTIONS --- */
+            section {
+                padding: 100px 8%;
+            }
+            .section-title {
+                text-align: center;
+                margin-bottom: 60px;
+            }
+            .section-title h2 {
+                font-size: 2.5rem;
+                color: var(--primary-blue);
+                margin-bottom: 10px;
+            }
+            .section-title p {
+                color: #666;
+                font-size: 1.1rem;
+            }
+
+            /* --- WHY US (FEATURES) --- */
+            .features-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 30px;
+            }
+            .feature-box {
+                padding: 40px;
+                background: var(--off-white);
+                border-radius: 15px;
+                transition: var(--transition);
+            }
+            .feature-box:hover {
+                background: var(--primary-blue);
+                color: var(--white);
+                transform: translateY(-10px);
+            }
+            .feature-box h3 {
+                margin: 20px 0;
+                font-size: 1.5rem;
+            }
+
+            /* --- SERVICES (PRICING) --- */
+            .pricing-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 20px;
+            }
+            .price-card {
+                border: 2px solid var(--off-white);
+                padding: 50px 30px;
+                border-radius: 20px;
+                text-align: center;
+                transition: var(--transition);
+            }
+            .price-card.popular {
+                border-color: var(--primary-blue);
+                position: relative;
+            }
+            .price-card h4 {
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+            }
+            .price-card .amount {
+                font-size: 3rem;
+                font-weight: 800;
+                color: var(--primary-blue);
+                margin-bottom: 20px;
+            }
+            .price-card ul {
+                list-style: none;
+                margin-bottom: 30px;
+            }
+            .price-card li {
+                margin-bottom: 10px;
+                color: #555;
+            }
+            .price-card:hover {
+                border-color: var(--primary-blue);
+                box-shadow: var(--shadow);
+            }
+
+            /* --- CONTACT --- */
+            .contact-container {
+                display: grid;
+                grid-template-columns: 1fr 1.5fr;
+                gap: 50px;
+                background: var(--off-white);
+                padding: 60px;
+                border-radius: 30px;
+            }
+            @media (max-width: 768px) {
+                .contact-container {
+                    grid-template-columns: 1fr;
+                    padding: 30px;
+                }
+            }
+
+            .contact-info h3 {
+                font-size: 2rem;
+                margin-bottom: 20px;
+            }
+            form input,
+            form textarea {
+                width: 100%;
+                padding: 15px;
+                margin-bottom: 20px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                outline: none;
+            }
+            form button {
+                background: var(--primary-blue);
+                color: white;
+                padding: 15px 40px;
+                border: none;
+                border-radius: 8px;
+                font-weight: 700;
+                cursor: pointer;
+                width: 100%;
+            }
+
+            /* --- FOOTER --- */
+            footer {
+                background: var(--dark-blue);
+                color: var(--white);
+                padding: 80px 8% 20px;
+            }
+            .footer-content {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 50px;
+                margin-bottom: 50px;
+            }
+            .footer-content h4 {
+                margin-bottom: 20px;
+                font-size: 1.2rem;
+            }
+            .footer-content p,
+            .footer-content a {
+                color: rgba(255, 255, 255, 0.7);
+                text-decoration: none;
+                display: block;
+                margin-bottom: 10px;
+            }
+            .footer-bottom {
+                text-align: center;
+                padding-top: 30px;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                font-size: 0.9rem;
+            }
+        </style>
+    </head>
+    <body>
+        <nav>
+            <div class="logo">SonicCore</div>
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#why">Why Us</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="#" class="nav-btn">Book Now</a></li>
+            </ul>
+            <div class="burger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </nav>
+
+        <div class="hero">
+            <button class="c-btn prev">&#10094;</button>
+            <button class="c-btn next">&#10095;</button>
+            <div class="carousel-container">
+                <div
+                    class="slide"
+                    style="
+                        width: 100%;
+                        background-image: url(&quot;imgs/music-1.jpeg&quot;);
+                        background-size: cover;
+                        background-position: center;
+                        background-repeat: no-repeat;
+                        overflow: hidden;
+                        cursor: pointer;
+                        position: relative;
+                        box-shadow:
+                            0 10px 25px rgba(0, 0, 0, 0.35),
+                            0 5px 10px rgba(0, 0, 0, 0.2);
+                        transition: all 0.4s ease;
+                    "
+                >
+                    <h1>Elite Sound Engineering</h1>
+                    <p>
+                        Award-winning mixing and mastering services tailored to
+                        your unique sonic identity.
+                    </p>
+                    <a
+                        href="#services"
+                        class="nav-btn"
+                        style="text-decoration: none"
+                        >Explore Services</a
+                    >
+                </div>
+                <div
+                    class="slide"
+                    style="
+                        width: 100%;
+                        background-image: url(&quot;imgs/music-2.jpeg&quot;);
+                        background-size: cover;
+                        background-position: center;
+                        background-repeat: no-repeat;
+                        overflow: hidden;
+                        cursor: pointer;
+                        position: relative;
+                        box-shadow:
+                            0 10px 25px rgba(0, 0, 0, 0.35),
+                            0 5px 10px rgba(0, 0, 0, 0.2);
+                        transition: all 0.4s ease;
+                    "
+                >
+                    <h1>World-Class Equipment</h1>
+                    <p>
+                        From vintage analog gear to the latest digital
+                        workstations, we have it all.
+                    </p>
+                    <a href="#why" class="nav-btn" style="text-decoration: none"
+                        >View Our Gear</a
+                    >
+                </div>
+            </div>
+        </div>
+
+        <section id="why">
+            <div class="section-title">
+                <h2>Why SonicCore?</h2>
+                <p>We combine technical precision with artistic intuition.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-box">
+                    <h3>Acoustic Perfection</h3>
+                    <p>
+                        Our rooms are professionally treated to ensure the most
+                        accurate monitoring environment possible.
+                    </p>
+                </div>
+                <div class="feature-box">
+                    <h3>Top-Tier Engineers</h3>
+                    <p>
+                        Work with specialists who have decades of experience
+                        across all musical genres.
+                    </p>
+                </div>
+                <div class="feature-box">
+                    <h3>Global Delivery</h3>
+                    <p>
+                        We offer remote mixing and mastering services for
+                        artists anywhere in the world.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="services" style="background: var(--off-white)">
+            <div class="section-title">
+                <h2>Studio Packages</h2>
+                <p>Transparent pricing for every stage of your project.</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <h4>Single Track</h4>
+                    <div class="amount">$250</div>
+                    <ul>
+                        <li>Full Mixing</li>
+                        <li>2 Revision Rounds</li>
+                        <li>WAV & MP3 Delivery</li>
+                    </ul>
+                    <button class="nav-btn" style="border: none; width: 100%">
+                        Select Plan
+                    </button>
+                </div>
+                <div class="price-card popular">
+                    <h4>EP Package</h4>
+                    <div class="amount">$800</div>
+                    <ul>
+                        <li>Up to 4 Tracks</li>
+                        <li>Priority Scheduling</li>
+                        <li>Mastering Included</li>
+                    </ul>
+                    <button class="nav-btn" style="border: none; width: 100%">
+                        Select Plan
+                    </button>
+                </div>
+                <div class="price-card">
+                    <h4>Full Album</h4>
+                    <div class="amount">$1800</div>
+                    <ul>
+                        <li>Up to 12 Tracks</li>
+                        <li>Instrumental Stems</li>
+                        <li>Dedicated Project Manager</li>
+                    </ul>
+                    <button class="nav-btn" style="border: none; width: 100%">
+                        Select Plan
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>Get In Touch</h3>
+                    <p>
+                        Ready to start your next hit? Send us a message and
+                        let's talk about your music.
+                    </p>
+                    <br />
+                    <p><strong>Email:</strong> hello@soniccore.com</p>
+                    <p><strong>Phone:</strong> +1 (555) 123-4567</p>
+                </div>
+                <form id="contact-form">
+                    <input type="text" placeholder="Full Name" required />
+                    <input type="email" placeholder="Email Address" required />
+                    <textarea
+                        rows="5"
+                        placeholder="Tell us about your project..."
+                        required
+                    ></textarea>
+                    <button type="submit">Send Message</button>
+                </form>
+            </div>
+        </section>
+
+        <footer>
+            <div class="footer-content">
+                <div>
+                    <h4 class="logo" style="color: white">SonicCore</h4>
+                    <p>
+                        Pushing the boundaries of audio excellence since 2010.
+                    </p>
+                </div>
+                <div>
+                    <h4>Navigation</h4>
+                    <a href="#">Home</a>
+                    <a href="#why">Why Us</a>
+                    <a href="#services">Services</a>
+                </div>
+                <div>
+                    <h4>Social</h4>
+                    <a href="#">Instagram</a>
+                    <a href="#">Spotify</a>
+                    <a href="#">YouTube</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2026 SonicCore Studios. Designed for Excellence.
+            </div>
+        </footer>
+
+        <script>
+            // MOBILE NAV LOGIC
+            const navSlide = () => {
+                const burger = document.querySelector(".burger");
+                const nav = document.querySelector(".nav-links");
+                burger.addEventListener("click", () => {
+                    nav.classList.toggle("nav-active");
+                    burger.classList.toggle("toggle");
+                });
+            };
+
+            // CUSTOM CAROUSEL LOGIC
+            const carousel = () => {
+                const container = document.querySelector(".carousel-container");
+                const slides = document.querySelectorAll(".slide");
+                const nextBtn = document.querySelector(".next");
+                const prevBtn = document.querySelector(".prev");
+                let index = 0;
+
+                const update = () => {
+                    container.style.transform = `translateX(${-index * 100}%)`;
+                };
+
+                nextBtn.addEventListener("click", () => {
+                    index = index < slides.length - 1 ? index + 1 : 0;
+                    update();
+                });
+
+                prevBtn.addEventListener("click", () => {
+                    index = index > 0 ? index - 1 : slides.length - 1;
+                    update();
+                });
+
+                setInterval(() => {
+                    index = index < slides.length - 1 ? index + 1 : 0;
+                    update();
+                }, 6000);
+            };
+
+            // INITIALIZE
+            navSlide();
+            carousel();
+
+            // FORM SUBMISSION PREVENT
+            document
+                .getElementById("contact-form")
+                .addEventListener("submit", e => {
+                    e.preventDefault();
+                    alert("Thank you! Your message has been sent.");
+                });
+        </script>
+    </body>
+</html>
